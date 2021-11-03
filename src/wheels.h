@@ -5,8 +5,8 @@
 #include "safe_motor.h"
 
 // ports for the wheels
-#define TOP_LEFT_WHEEL 3
-#define TOP_RIGHT_WHEEL 4
+#define TOP_LEFT_WHEEL 4
+#define TOP_RIGHT_WHEEL 3
 #define BOTTOM_LEFT_WHEEL 2
 #define BOTTOM_RIGHT_WHEEL 1
 

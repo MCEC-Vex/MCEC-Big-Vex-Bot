@@ -105,11 +105,17 @@ void opcontrol()
 	{
 		// move the hex bot using controller input
 		hex_drive.drive(master);
-		//hex_drive.output_temperatures();	// show wheel motor temperatures
 
-		grab_hand.run(master);	// handle the grabber hand motor and related controller input
+		// show wheel motor temperatures
+		hex_drive.output_temperatures();
+
+		// handle the grabber hand motor and related controller input
+		grab_hand.run(master);
+
+		// keep track of the bot's orientation
 		hex_drive.run();
 
+		// wait for a specific amount of time before looping
 		pros::delay(TICK_DELAY);
 	}
 }

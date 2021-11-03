@@ -6,6 +6,4 @@
 // delay between ticks in milliseconds
 #define TICK_DELAY 1
 
-
-
 #endif

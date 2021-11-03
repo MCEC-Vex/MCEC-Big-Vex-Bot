@@ -4,13 +4,16 @@
 #include "constants.h"
 #include <iostream>
 
+// default constructor
 Wheels::Wheels()
 {
+  // initialize each wheel as a Safe_Motor pointer
   top_left = new Safe_Motor(TOP_LEFT_WHEEL, TOP_LEFT_WHEEL_DIRECTION);
   top_right = new Safe_Motor(TOP_RIGHT_WHEEL, TOP_RIGHT_WHEEL_DIRECTION);
   bottom_left = new Safe_Motor(BOTTOM_LEFT_WHEEL, BOTTOM_LEFT_WHEEL_DIRECTION);
   bottom_right = new Safe_Motor(BOTTOM_RIGHT_WHEEL, BOTTOM_RIGHT_WHEEL_DIRECTION);
 
+  // the angle the bot thinks it is facing
   angle = 0;
 }
 
@@ -88,35 +91,38 @@ void Wheels::stop()
   bottom_right->set_voltage(0);
 }
 
+// print wheel motor temperatures to lcd screen
 void Wheels::output_temperatures()
 {
+  // put temp of each motor on lcd
   pros::lcd::set_text(1, "Top Left Temperature: " + std::to_string(top_left->get_temperature()));
   pros::lcd::set_text(2, "Top Right Temperature: " + std::to_string(top_right->get_temperature()));
   pros::lcd::set_text(3, "Bottom Left Temperature: " + std::to_string(bottom_left->get_temperature()));
   pros::lcd::set_text(4, "Bottom Right Temperature: " + std::to_string(bottom_right->get_temperature()));
 }
 
+// handle instructions that should be run every frame to keep wheel's information up to date
 void Wheels::run()
 {
+  //
+  // calculate the angular orientation of the bot
+  //
 
-    //TOP_LEFT_WHEEL_DIRECTION * 0.001 * TICK_DELAY * top_left->get_actual_velocity() * (60 / (WHEEL_DIAMETER*M_PI));
-    double top_left_velocity = TOP_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-    double top_right_velocity = TOP_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-    double bottom_left_velocity = BOTTOM_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-    double bottom_right_velocity = BOTTOM_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
+  // get the velocity (in rpm) of each wheel motor
+  double top_left_velocity = TOP_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
+  double top_right_velocity = TOP_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
+  double bottom_left_velocity = BOTTOM_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
+  double bottom_right_velocity = BOTTOM_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
 
-    //double left_delta_y = (M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_left_velocity + bottom_left_velocity);
-    //double right_delta_y = (M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_right_velocity + bottom_right_velocity);
-    double left_delta_y = (M_PI*WHEEL_DIAMETER*TICK_DELAY*0.001*std::sqrt(2)/120)*(top_left_velocity + bottom_left_velocity);
-    double right_delta_y = (M_PI*WHEEL_DIAMETER*TICK_DELAY*0.001*std::sqrt(2)/120)*(top_right_velocity + bottom_right_velocity);
-    //double left_delta_y = (top_left_position_change + bottom_left_position_change) * std::sin(M_PI/4);
-    //double right_delta_y = (-top_right_position_change + -bottom_right_position_change) * std::sin(M_PI/4);
+  // get the change in distance (specifically forward/backward) for the left wheels and the right wheels
+  // ((pi * wheel diameter (inches) * time elapsed (seconds)) / (60 seconds)) * sin(pi/4) * (top left velocity (rpm) + bottom left velocity (rpm)))
+  double left_delta_y = (M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_left_velocity + bottom_left_velocity);
+  // -((pi * wheel diameter (inches) * time elapsed (seconds)) / (60 seconds)) * sin(pi/4) * (top left velocity (rpm) + bottom left velocity (rpm)))
+  double right_delta_y = -(M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_right_velocity + bottom_right_velocity);
 
-    double angle_change = (left_delta_y - right_delta_y) / (DISTANCE_BETWEEN_WHEELS);
+  // compare movement of left and right set of wheels to get change in angle
+  double angle_change = (left_delta_y - right_delta_y) / (DISTANCE_BETWEEN_WHEELS); // (left forward - right forward) / distance between left and right
 
-    angle += angle_change;
-
-    pros::lcd::set_text(3, std::to_string(angle));
-    //std::cout << angle << std::endl;
-    //std::cout << "(" << left_delta_y << " - " << right_delta_y << ") / 32 = " << angle_change << std::endl;
+  // add the angle change to the current angle we have stored
+  angle += angle_change;
 }

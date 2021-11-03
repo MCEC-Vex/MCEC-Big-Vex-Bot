@@ -2,7 +2,7 @@
 #include "constants.h"
 
 // initialize current voltage and pass port # to pros Motor class
-Safe_Motor::Safe_Motor(char port, Motor_DIRECTION rotation_direction) : pros::Motor{port}
+Safe_Motor::Safe_Motor(char port, MOTOR_DIRECTION rotation_direction) : pros::Motor{port}
 {
   current_voltage = 0;  // voltage of motors start at 0
 

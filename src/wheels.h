@@ -12,10 +12,10 @@
 
 // directions of the wheels
 // forwards would cause the bot to rotate clockwase if all motors have +127 voltage
-#define TOP_LEFT_WHEEL_DIRECTION forwards
-#define TOP_RIGHT_WHEEL_DIRECTION forwards
-#define BOTTOM_LEFT_WHEEL_DIRECTION forwards
-#define BOTTOM_RIGHT_WHEEL_DIRECTION forwards
+#define TOP_LEFT_WHEEL_DIRECTION backwards
+#define TOP_RIGHT_WHEEL_DIRECTION backwards
+#define BOTTOM_LEFT_WHEEL_DIRECTION backwards
+#define BOTTOM_RIGHT_WHEEL_DIRECTION backwards
 
 // controller analogs that control certain wheel methods
 #define X_MOVE_ANALOG pros::E_CONTROLLER_ANALOG_LEFT_X
@@ -23,8 +23,8 @@
 #define ROTATION_ANALOG pros::E_CONTROLLER_ANALOG_RIGHT_X
 
 // physical properties of wheel system
-#define WHEEL_DIAMETER 3.25
-#define DISTANCE_BETWEEN_WHEELS 18.5
+#define WHEEL_DIAMETER 3.3
+#define DISTANCE_BETWEEN_WHEELS 14.81
 
 // keeps track of the 4 wheels
 class Wheels
@@ -65,6 +65,9 @@ private:
 	Safe_Motor* bottom_right;	// points to bottom_right wheel motor
 
 	double angle;				// angle of the robot (in radians)
+
+	// (rounds / minute) * (pi d inches / 1 round) * (1 minute / 60 seconds) * (milliseconds per tick / 1 millisecond)
+	const double rpm_to_inches_per_tick = M_PI * WHEEL_DIAMETER / 60 / 1000 * TICK_DELAY;
 };
 
 #endif

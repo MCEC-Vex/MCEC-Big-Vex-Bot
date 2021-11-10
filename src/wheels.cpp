@@ -108,6 +108,23 @@ void Wheels::run()
   // calculate the angular orientation of the bot
   //
 
+  // get the estimated distance traveled since the last tick using the current instantaneous velocity of the motor
+  // also convert from revolutions per minute to inches per tick
+  double top_left_distance = top_left->get_actual_velocity() * rpm_to_inches_per_tick;
+  double top_right_distance = top_right->get_actual_velocity() * rpm_to_inches_per_tick;
+  double bottom_left_distance = bottom_left->get_actual_velocity() * rpm_to_inches_per_tick;
+  double bottom_right_distance = bottom_right->get_actual_velocity() * rpm_to_inches_per_tick;
+
+  // 1/2((TL + BL + TR + BR) / distance between wheels)
+  double angle_change = 0.5 * ((top_left_distance + bottom_left_distance + top_right_distance + bottom_right_distance)/DISTANCE_BETWEEN_WHEELS);
+
+  // add the change in angle over the last tick to the angle tracker
+  angle += angle_change;
+
+  // display for testing
+  pros::lcd::set_text(4, std::to_string(angle * 180 / M_PI));
+
+  /*
   // get the velocity (in rpm) of each wheel motor
   double top_left_velocity = TOP_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
   double top_right_velocity = TOP_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
@@ -124,5 +141,5 @@ void Wheels::run()
   double angle_change = (left_delta_y - right_delta_y) / (DISTANCE_BETWEEN_WHEELS); // (left forward - right forward) / distance between left and right
 
   // add the angle change to the current angle we have stored
-  angle += angle_change;
+  angle += angle_change;*/
 }

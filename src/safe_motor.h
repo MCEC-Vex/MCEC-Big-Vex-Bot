@@ -18,8 +18,11 @@ public:
   // initialize current voltage and pass port # to pros Motor class
   Safe_Motor(char, MOTOR_DIRECTION);
 
-  // set the voltage on the motor, taking care not to change it if there would be no change
-  void set_voltage(double voltage);
+  // sets the voltage for the motor from -127 to 127 if input is different than current voltage
+  std::int32_t set_voltage(std::int32_t);
+
+  // sets the voltage for the motor from -127 to 127 if input is different than current voltage
+  std::int32_t move(const std::int32_t voltage);
 
   // Gets the actual velocity of the motor and takes into account the direction the motor is set to
   double get_actual_velocity();

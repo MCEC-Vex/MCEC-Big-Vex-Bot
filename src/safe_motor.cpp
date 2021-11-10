@@ -18,14 +18,27 @@ Safe_Motor::Safe_Motor(char port, MOTOR_DIRECTION rotation_direction) : pros::Mo
   }
 }
 
-// set the voltage on the motor, taking care not to change it if there would be no change
-// this prevents jittering
-void Safe_Motor::set_voltage(double voltage)
+// sets the voltage for the motor from -127 to 127 if input is different than current voltage
+std::int32_t Safe_Motor::set_voltage(const std::int32_t voltage)
 {
   // if new voltage and old voltage are significantly different
   if (std::abs(voltage - current_voltage) > MINIMUM_VOLTAGE_CHANGE)
   {
-    this->move(voltage);   // set voltage of wheel
+    return this->pros::Motor::move(voltage);   // set voltage of wheel
     current_voltage = voltage;  // store new voltage for future comparisons
   }
+
+  return 1;
+}
+
+// sets the voltage for the motor from -127 to 127 if input is different than current voltage
+std::int32_t Safe_Motor::move(const std::int32_t voltage)
+{
+  return this->set_voltage(voltage);
+}
+
+// Gets the actual velocity of the motor and takes into account the direction the motor is set to
+double Safe_Motor::get_actual_velocity()
+{
+  return direction * this->pros::Motor::get_actual_velocity();
 }

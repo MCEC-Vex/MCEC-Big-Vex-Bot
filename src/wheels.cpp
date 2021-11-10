@@ -120,26 +120,4 @@ void Wheels::run()
 
   // add the change in angle over the last tick to the angle tracker
   angle += angle_change;
-
-  // display for testing
-  pros::lcd::set_text(4, std::to_string(angle * 180 / M_PI));
-
-  /*
-  // get the velocity (in rpm) of each wheel motor
-  double top_left_velocity = TOP_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-  double top_right_velocity = TOP_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-  double bottom_left_velocity = BOTTOM_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-  double bottom_right_velocity = BOTTOM_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-
-  // get the change in distance (specifically forward/backward) for the left wheels and the right wheels
-  // ((pi * wheel diameter (inches) * time elapsed (seconds)) / (60 seconds)) * sin(pi/4) * (top left velocity (rpm) + bottom left velocity (rpm)))
-  double left_delta_y = (M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_left_velocity + bottom_left_velocity);
-  // -((pi * wheel diameter (inches) * time elapsed (seconds)) / (60 seconds)) * sin(pi/4) * (top left velocity (rpm) + bottom left velocity (rpm)))
-  double right_delta_y = -(M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_right_velocity + bottom_right_velocity);
-
-  // compare movement of left and right set of wheels to get change in angle
-  double angle_change = (left_delta_y - right_delta_y) / (DISTANCE_BETWEEN_WHEELS); // (left forward - right forward) / distance between left and right
-
-  // add the angle change to the current angle we have stored
-  angle += angle_change;*/
 }

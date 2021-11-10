@@ -4,6 +4,10 @@
 #include "main.h"
 #include "constants.h"
 
+/*
+
+*/
+
 // if we would change voltage and change would be less than this, no change happens
 #define MINIMUM_VOLTAGE_CHANGE 1
 
@@ -15,6 +19,9 @@ enum MOTOR_DIRECTION {backwards=-1, forwards=1};
 class Safe_Motor : public pros::Motor
 {
 public:
+  // initialize and pass port to pros Motor class
+  Safe_Motor(char);
+
   // initialize current voltage and pass port # to pros Motor class
   Safe_Motor(char, MOTOR_DIRECTION);
 
@@ -24,9 +31,6 @@ public:
 private:
   // stores the voltage recorded to being sent to the motor
   double current_voltage;
-
-  // the direction the motor rotates
-  int direction;
 };
 
 #endif

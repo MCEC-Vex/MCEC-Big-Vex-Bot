@@ -108,21 +108,16 @@ void Wheels::run()
   // calculate the angular orientation of the bot
   //
 
-  // get the velocity (in rpm) of each wheel motor
-  double top_left_velocity = TOP_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-  double top_right_velocity = TOP_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-  double bottom_left_velocity = BOTTOM_LEFT_WHEEL_DIRECTION * top_left->get_actual_velocity();
-  double bottom_right_velocity = BOTTOM_RIGHT_WHEEL_DIRECTION * top_left->get_actual_velocity();
+  // get the estimated distance traveled since the last tick using the current instantaneous velocity of the motor
+  // also convert from revolutions per minute to inches per tick
+  double top_left_distance = top_left->get_actual_velocity() * rpm_to_inches_per_tick;
+  double top_right_distance = top_right->get_actual_velocity() * rpm_to_inches_per_tick;
+  double bottom_left_distance = bottom_left->get_actual_velocity() * rpm_to_inches_per_tick;
+  double bottom_right_distance = bottom_right->get_actual_velocity() * rpm_to_inches_per_tick;
 
-  // get the change in distance (specifically forward/backward) for the left wheels and the right wheels
-  // ((pi * wheel diameter (inches) * time elapsed (seconds)) / (60 seconds)) * sin(pi/4) * (top left velocity (rpm) + bottom left velocity (rpm)))
-  double left_delta_y = (M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_left_velocity + bottom_left_velocity);
-  // -((pi * wheel diameter (inches) * time elapsed (seconds)) / (60 seconds)) * sin(pi/4) * (top left velocity (rpm) + bottom left velocity (rpm)))
-  double right_delta_y = -(M_PI*WHEEL_DIAMETER*TICK_DELAY/120000)*(top_right_velocity + bottom_right_velocity);
+  // 1/2((TL + BL + TR + BR) / distance between wheels)
+  double angle_change = 0.5 * ((top_left_distance + bottom_left_distance + top_right_distance + bottom_right_distance)/DISTANCE_BETWEEN_WHEELS);
 
-  // compare movement of left and right set of wheels to get change in angle
-  double angle_change = (left_delta_y - right_delta_y) / (DISTANCE_BETWEEN_WHEELS); // (left forward - right forward) / distance between left and right
-
-  // add the angle change to the current angle we have stored
+  // add the change in angle over the last tick to the angle tracker
   angle += angle_change;
 }

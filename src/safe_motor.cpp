@@ -22,3 +22,9 @@ void Safe_Motor::set_voltage(double voltage)
     current_voltage = voltage;  // store new voltage for future comparisons
   }
 }
+
+// Gets the actual velocity of the motor and takes into account the direction the motor is set to
+double Safe_Motor::get_actual_velocity()
+{
+  return direction * this->pros::Motor::get_actual_velocity();
+}

@@ -21,6 +21,9 @@ public:
   // set the voltage on the motor, taking care not to change it if there would be no change
   void set_voltage(double voltage);
 
+  // Gets the actual velocity of the motor and takes into account the direction the motor is set to
+  double get_actual_velocity();
+
 private:
   // stores the voltage recorded to being sent to the motor
   double current_voltage;

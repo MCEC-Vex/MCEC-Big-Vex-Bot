@@ -21,18 +21,18 @@ Safe_Motor::Safe_Motor(char port, MOTOR_DIRECTION rotation_direction) : pros::Mo
 // sets the voltage for the motor from -127 to 127 if input is different than current voltage
 std::int32_t Safe_Motor::set_voltage(const std::int32_t voltage)
 {
-
+  /*
   int v = voltage;
 
   if (this->is_reversed())
   {
     v *= -1;
   }
-
+  */
   // if new voltage and old voltage are significantly different
-  if (std::abs(v - current_voltage) > MINIMUM_VOLTAGE_CHANGE)
+  if (std::abs(voltage - current_voltage) > MINIMUM_VOLTAGE_CHANGE)
   {
-    current_voltage = v;  // store new voltage for future comparisons
+    current_voltage = voltage;  // store new voltage for future comparisons
     return this->pros::Motor::move(voltage);   // set voltage of wheel
   }
 

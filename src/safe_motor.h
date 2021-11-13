@@ -26,7 +26,7 @@ public:
   Safe_Motor(char, MOTOR_DIRECTION);
 
   // sets the voltage for the motor from -127 to 127 if input is different than current voltage
-  std::int32_t set_voltage(std::int32_t);
+  std::int32_t set_voltage(const std::int32_t);
 
   // sets the voltage for the motor from -127 to 127 if input is different than current voltage
   std::int32_t move(const std::int32_t voltage);

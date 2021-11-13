@@ -1,13 +1,11 @@
 #include "main.h"
 #include <cmath>
 #include "wheels.h"
-#include "grabber.h"
 #include "constants.h"
 
 // parts of the robot / controller
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 Wheels hex_drive;
-Grabber grab_hand;
 
 
 
@@ -108,9 +106,6 @@ void opcontrol()
 
 		// show wheel motor temperatures
 		hex_drive.output_temperatures();
-
-		// handle the grabber hand motor and related controller input
-		grab_hand.run(master);
 
 		// keep track of the bot's orientation
 		hex_drive.run();

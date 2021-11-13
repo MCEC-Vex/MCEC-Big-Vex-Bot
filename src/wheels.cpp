@@ -46,6 +46,11 @@ void Wheels::drive(double move_x, double move_y, double rotation_factor)
   top_right->set_voltage((move_magnitude * std::sin(move_angle + 3*M_PI/4))/2 + rotation_factor/2);     // r*sin(theta+3pi/4)
   bottom_left->set_voltage((move_magnitude * std::sin(move_angle - M_PI/4))/2 + rotation_factor/2);     // r*sin(theta-pi/4)
   bottom_right->set_voltage((move_magnitude * std::sin(move_angle - 3*M_PI/4))/2 + rotation_factor/2);  // r*sin(theta-3pi/4)
+
+  pros::lcd::set_text(1, std::to_string((move_magnitude * std::sin(move_angle + M_PI/4))/2) + " + " + std::to_string(rotation_factor/2));
+  pros::lcd::set_text(2, std::to_string((move_magnitude * std::sin(move_angle + 3*M_PI/4))/2) + " + " + std::to_string(rotation_factor/2));
+  pros::lcd::set_text(3, std::to_string((move_magnitude * std::sin(move_angle - M_PI/4))/2) + " + " + std::to_string(rotation_factor/2));
+  pros::lcd::set_text(4, std::to_string((move_magnitude * std::sin(move_angle - 3*M_PI/4))/2) + " + " + std::to_string(rotation_factor/2));
 }
 
 // if drive is called with a controller argument, get vector of motion from controller instead
@@ -81,6 +86,39 @@ void Wheels::rotate(double rotation_factor)
 void Wheels::rotate(pros::Controller master)
 {
   rotate(master.get_analog(ROTATION_ANALOG));  // get the x of the left joystick and pass that as the rotation_factor
+}
+
+// moves the robot in a set direction while rotating for a set amount of time
+// ONLY TO BE USED DURING AUTONOMOUS PHASE
+void Wheels::drive_and_rotate(double x, double y, double rotation_factor, int milliseconds)
+{
+  // set timer at 0
+  int milliseconds_elapsed = 0;
+
+  // reset angle
+  angle = 0;
+
+  // until enough time has passed
+  while(milliseconds_elapsed < milliseconds)
+  {
+    // get the angle and magnitude from x and y
+    double move_angle = std::atan2(y, x);
+    move_angle -= angle;  // combine the "global" angle with what we get from x and y
+    double move_magnitude = std::sqrt(pow(x, 2) + pow(y, 2));
+
+    // get the x and y components of x and y with the new angle
+    x = move_magnitude * std::cos(move_angle);
+    y = move_magnitude * std::sin(move_angle);
+
+    // drive in x, y direction while rotating
+    drive(x, y, rotation_factor);
+
+    // wait a millisecond
+    pros::delay(1);
+
+    // increment timer
+    milliseconds_elapsed++;
+  }
 }
 
 void Wheels::stop()

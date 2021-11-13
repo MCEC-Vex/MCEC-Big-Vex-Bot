@@ -71,17 +71,7 @@ void competition_initialize() {}
 void autonomous()
 {
 	pros::delay(1000);
-	hex_drive.drive(127, 127);
-	pros::delay(1000);
-	hex_drive.stop();
-	pros::delay(500);
-	hex_drive.rotate(-100);
-	pros::delay(1000);
-	hex_drive.stop();
-	pros::delay(500);
-	hex_drive.drive(-50, 0, 127);
-	pros::delay(1000);
-	hex_drive.stop();
+	hex_drive.drive_and_rotate(100, 50, 127, 1000);
 }
 
 /**
@@ -99,6 +89,8 @@ void autonomous()
  */
 void opcontrol()
 {
+	autonomous();
+
 	while (true)
 	{
 		// move the hex bot using controller input

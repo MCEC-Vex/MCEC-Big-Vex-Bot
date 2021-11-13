@@ -49,6 +49,10 @@ public:
 	// if rotate is called with a controller argument, get rotation speed and direction from controller instead
 	void rotate(pros::Controller);
 
+	// moves the robot in a set direction while rotating for a set amount of time
+	// ONLY TO BE USED DURING AUTONOMOUS PHASE
+	void drive_and_rotate(double, double, double, int);
+
 	// stop all wheel motors
 	void stop();
 

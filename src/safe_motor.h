@@ -34,6 +34,9 @@ public:
   // Gets the actual velocity of the motor and takes into account the direction the motor is set to
   double get_actual_velocity();
 
+  // set the motor position and set current_voltage correctly
+  std::int32_t move_absolute(double position, std::int32_t velocity);
+
 private:
   // stores the voltage recorded to being sent to the motor
   double current_voltage;

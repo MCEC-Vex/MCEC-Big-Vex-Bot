@@ -58,6 +58,13 @@ void Wheels::drive(pros::Controller master)
     drive(master.get_analog(X_MOVE_ANALOG),
                             master.get_analog(Y_MOVE_ANALOG),
                             master.get_analog(ROTATION_ANALOG));
+  } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) || master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT) || master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) || master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+    // drive using the arrow keys instead of the joystick
+
+    // x = 127 * (boolean - boolean)
+    // y = 127 * (boolean - boolean)
+    drive(127 * (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) - master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)),
+          127 * (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) - master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)));
   } else {
     // pass in the x and y components of the left joystick as move_x and move_y in drive()
     drive(master.get_analog(X_MOVE_ANALOG),

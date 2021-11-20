@@ -50,3 +50,16 @@ double Safe_Motor::get_actual_velocity()
 {
   return this->pros::Motor::get_actual_velocity();
 }
+
+// set the motor position and set current_voltage correctly
+std::int32_t Safe_Motor::move_absolute(double position, std::int32_t velocity)
+{
+  // set the movement of the motor
+  std::int32_t ret_val = this->pros::Motor::move_absolute(position, velocity);
+
+  // set the stored voltage to the current voltage we have
+  current_voltage = this->get_voltage();
+
+  // return the value given by pros::Motor::move_absolute
+  return ret_val;
+}

@@ -2,11 +2,12 @@
 #include <cmath>
 #include "wheels.h"
 #include "constants.h"
+#include "arm.h"
 
 // parts of the robot / controller
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 Wheels hex_drive;
-
+Arm arm;
 
 
 /**
@@ -109,6 +110,9 @@ void opcontrol()
 
 		// keep track of the bot's orientation
 		hex_drive.run();
+
+		// move arm using controller input
+		arm.move(master);
 
 		// wait for a specific amount of time before looping
 		pros::delay(TICK_DELAY);

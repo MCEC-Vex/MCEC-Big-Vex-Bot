@@ -109,11 +109,8 @@ void opcontrol()
 
 		// keep track of the bot's orientation
 		hex_drive.run();
-<<<<<<< Updated upstream
 
 		// wait for a specific amount of time before looping
 		pros::delay(TICK_DELAY);
-=======
->>>>>>> Stashed changes
 	}
 }

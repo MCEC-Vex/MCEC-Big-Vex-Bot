@@ -20,10 +20,10 @@ class Safe_Motor : public pros::Motor
 {
 public:
   // initialize and pass port to pros Motor class
-  Safe_Motor(char);
+  Safe_Motor(std::uint8_t);
 
   // initialize current voltage and pass port # to pros Motor class
-  Safe_Motor(char, MOTOR_DIRECTION);
+  Safe_Motor(std::uint8_t, MOTOR_DIRECTION);
 
   // sets the voltage for the motor from -127 to 127 if input is different than current voltage
   std::int32_t set_voltage(const std::int32_t);

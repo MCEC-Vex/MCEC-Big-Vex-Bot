@@ -5,10 +5,10 @@
 #include "safe_motor.h"
 
 // ports for the wheels
-#define TOP_LEFT_WHEEL 4
-#define TOP_RIGHT_WHEEL 3
-#define BOTTOM_LEFT_WHEEL 2
-#define BOTTOM_RIGHT_WHEEL 1
+#define TOP_LEFT_WHEEL 15
+#define TOP_RIGHT_WHEEL 4
+#define BOTTOM_LEFT_WHEEL 16
+#define BOTTOM_RIGHT_WHEEL 10
 
 // directions of the wheels
 // forwards would cause the bot to rotate clockwase if all motors have +127 voltage

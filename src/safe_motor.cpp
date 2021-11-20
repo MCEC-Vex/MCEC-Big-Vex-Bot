@@ -2,13 +2,13 @@
 #include "constants.h"
 
 
-Safe_Motor::Safe_Motor(char port) : pros::Motor{port}
+Safe_Motor::Safe_Motor(std::uint8_t port) : pros::Motor{port}
 {
   current_voltage = 0;
 }
 
 // initialize current voltage and pass port # to pros Motor class
-Safe_Motor::Safe_Motor(char port, MOTOR_DIRECTION rotation_direction) : pros::Motor{port}
+Safe_Motor::Safe_Motor(std::uint8_t port, MOTOR_DIRECTION rotation_direction) : pros::Motor{port}
 {
   current_voltage = 0;  // voltage of motors start at 0
 

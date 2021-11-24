@@ -3,22 +3,23 @@
 // default constructor
 Arm::Arm()
 {
-  // setup the arm motor with its port and direction
+  // setup the arm motors with their ports and directions
   arm_motor_1 = new Safe_Motor(ARM_1_PORT, ARM_1_DIRECTION);
   arm_motor_2 = new Safe_Motor(ARM_2_PORT, ARM_2_DIRECTION);
 
-  // set the brake mode on the arm motor
+  // set the brake mode on the arm motors
   arm_motor_1->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   arm_motor_2->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
-  // set the way the arm motor measures movement internally to degrees
+  // set the way the arm motors measures movement internally to degrees
   arm_motor_1->set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
   arm_motor_2->set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
 
-  // set the arm motor's zero position to its current position
+  // set the arm motors' zero positions to their current position
   arm_motor_1->tare_position();
   arm_motor_2->tare_position();
 
+  // set the angle to 0 for tracking
   target_angle = 0;
 }
 
@@ -29,53 +30,70 @@ Arm::Arm()
 // get input from the controller and move the arm accordingly
 void Arm::move(pros::Controller master)
 {
-  pros::lcd::set_text(6, std::to_string(target_angle));
   // if R1 is held but not R2, move arm up
   if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && !master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
   {
-    if (target_angle > 90)
+    // if arm is to far up, do not let it move further and keep it at max
+    if (target_angle > UPPER_ANGLE_LIMIT)
     {
-      target_angle = 90;
+      // keep angle at max
+      target_angle = UPPER_ANGLE_LIMIT;
+
+      // move to max in case slightly past
+      arm_motor_1->move_absolute(MOTOR_TO_ARM_RATIO*target_angle, MOVE_VOLTAGE);
+      arm_motor_2->move_absolute(MOTOR_TO_ARM_RATIO*target_angle, MOVE_VOLTAGE);
     }
+    // move arms up
     else
     {
-      // move arm up
+      // move arms up
       arm_motor_1->move(MOVE_VOLTAGE);
       arm_motor_2->move(MOVE_VOLTAGE);
-      target_angle = arm_motor_1->get_position() / 10;
+
+      // track angle
+      target_angle = arm_motor_1->get_position() / MOTOR_TO_ARM_RATIO;
     }
   }
   // if R2 is not held but R2 is, move arm down
   else if (!master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
   {
-    // move arm down
-    if (target_angle < 10)
+    // if arm is too far down, do not let it move further and keep it at min
+    if (target_angle < LOWER_ANGLE_LIMIT)
     {
-      target_angle = 10;
-      arm_motor_1->move_absolute(10*target_angle, MOVE_VOLTAGE);
-      arm_motor_2->move_absolute(10*target_angle, MOVE_VOLTAGE);
+      // keep angle at min
+      target_angle = LOWER_ANGLE_LIMIT;
+
+      // move to min in case slightly past
+      arm_motor_1->move_absolute(MOTOR_TO_ARM_RATIO*target_angle, MOVE_VOLTAGE);
+      arm_motor_2->move_absolute(MOTOR_TO_ARM_RATIO*target_angle, MOVE_VOLTAGE);
     }
+    // move arms down
     else
     {
+      // move arms down
       arm_motor_1->move(-MOVE_VOLTAGE);
       arm_motor_2->move(-MOVE_VOLTAGE);
+
+      // track angle
       target_angle = arm_motor_1->get_position() / 10;
     }
   }
-  // if R1 and R2 are held or neither are held, stop arm from moving
+  // if R1 and R2 are held or neither are held, stop arms from moving
   else
   {
-    // set voltage on arm motor to 0
+    // set voltage on arm motors to 0
     arm_motor_1->move_absolute(10*target_angle, ARM_STOP_VOLTAGE);
     arm_motor_2->move_absolute(10*target_angle, ARM_STOP_VOLTAGE);
   }
 }
 
-// set the voltage of the arm to the arguemnt sent
+// set the voltage of the arms to the arguemnt sent
 void Arm::set_angle(double angle)
 {
-  // set the voltage on the motor to go towards the specified angle
+  // set the voltage on the motors to go towards the specified angle
   arm_motor_1->move_absolute(10*angle, MOVE_VOLTAGE);
   arm_motor_2->move_absolute(10*angle, MOVE_VOLTAGE);
+
+  // track the angle
   target_angle = angle;
 }

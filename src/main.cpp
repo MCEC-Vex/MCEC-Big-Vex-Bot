@@ -3,11 +3,13 @@
 #include "wheels.h"
 #include "constants.h"
 #include "arm.h"
+#include "claw.h"
 
 // parts of the robot / controller
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 Wheels hex_drive;
 Arm arm;
+Claw claw;
 
 
 /**
@@ -100,10 +102,7 @@ void autonomous()
  */
 void opcontrol()
 {
-	arm.set_angle(90);
-	pros::delay(4000);
-	arm.set_angle(45);
-	pros::delay(4000);
+
 
 	while (true)
 	{
@@ -118,6 +117,8 @@ void opcontrol()
 
 		// move arm using controller input
 		arm.move(master);
+
+		claw.run(master);
 
 		// wait for a specific amount of time before looping
 		pros::delay(TICK_DELAY);

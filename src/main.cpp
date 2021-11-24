@@ -100,6 +100,11 @@ void autonomous()
  */
 void opcontrol()
 {
+	arm.set_angle(90);
+	pros::delay(4000);
+	arm.set_angle(45);
+	pros::delay(4000);
+
 	while (true)
 	{
 		// move the hex bot using controller input

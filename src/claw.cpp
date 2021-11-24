@@ -15,7 +15,7 @@ Claw::Claw()
 void Claw::open()
 {
   // open the claw
-  piston->set_value(true);
+  piston->set_value(false);
 
   // set the claw's state to opened
   claw_state = opened;
@@ -25,7 +25,7 @@ void Claw::open()
 void Claw::close()
 {
   // close the claw
-  piston->set_value(false);
+  piston->set_value(true);
 
   // set the claw's state to closed
   claw_state = closed;
@@ -35,7 +35,7 @@ void Claw::close()
 void Claw::run(pros::Controller master)
 {
   // check if "A" was pressed on the controller
-  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A))
+  if (master.get_digital_new_press(CLAW_BUTTON))
   {
     // if the claw is closed, open it now
     if (claw_state == closed)

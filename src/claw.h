@@ -6,6 +6,8 @@
 // port for the pnuematic piston
 #define PISTON_PORT 'A'
 
+#define CLAW_BUTTON pros::E_CONTROLLER_DIGITAL_A
+
 // used to measure whether the claw is open or close
 enum STATE {closed, opened};
 

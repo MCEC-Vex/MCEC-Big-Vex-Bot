@@ -21,6 +21,12 @@ Arm::Arm()
 
   // set the angle to 0 for tracking
   target_angle = 0;
+
+  // initialize the claw piston pointer
+  claw_piston = new pros::ADIDigitalOut(PISTON_PORT);
+
+  // open the claw
+  this->open();
 }
 
 // --------------------------------
@@ -28,7 +34,7 @@ Arm::Arm()
 // --------------------------------
 
 // get input from the controller and move the arm accordingly
-void Arm::move(pros::Controller master)
+void Arm::run(pros::Controller master)
 {
   // if R1 is held but not R2, move arm up
   if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && !master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
@@ -85,6 +91,27 @@ void Arm::move(pros::Controller master)
     arm_motor_1->move_absolute(10*target_angle, ARM_STOP_VOLTAGE);
     arm_motor_2->move_absolute(10*target_angle, ARM_STOP_VOLTAGE);
   }
+
+  // ---------------
+  // HANDLE THE CLAW
+  // ---------------
+
+  // check if the claw's button was pressed on the controller
+  if (master.get_digital_new_press(CLAW_BUTTON))
+  {
+    // if the claw is closed, open it now
+    if (claw_state == closed)
+    {
+      // open the claw
+      this->open();
+    }
+    // if the claw is opened, close it now
+    else if (claw_state == opened)
+    {
+      // close the claw
+      this->close();
+    }
+  }
 }
 
 // set the voltage of the arms to the arguemnt sent
@@ -96,4 +123,24 @@ void Arm::set_angle(double angle)
 
   // track the angle
   target_angle = angle;
+}
+
+// open the claw
+void Arm::open()
+{
+  // open the claw
+  claw_piston->set_value(false);
+
+  // set the claw's state to opened
+  claw_state = opened;
+}
+
+// close the claw
+void Arm::close()
+{
+  // close the claw
+  claw_piston->set_value(true);
+
+  // set the claw's state to closed
+  claw_state = closed;
 }

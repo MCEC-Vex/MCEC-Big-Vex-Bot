@@ -3,13 +3,13 @@
 #include "wheels.h"
 #include "constants.h"
 #include "arm.h"
-#include "claw.h"
+#include "line_tracker.h"
 
 // parts of the robot / controller
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 Wheels hex_drive;
 Arm arm;
-Claw claw;
+Line_Tracker line_tracker;
 
 
 /**
@@ -102,7 +102,7 @@ void autonomous()
  */
 void opcontrol()
 {
-
+	int test = 0;
 
 	while (true)
 	{
@@ -116,9 +116,11 @@ void opcontrol()
 		hex_drive.run();
 
 		// move arm using controller input
-		arm.move(master);
+		arm.run(master);
 
-		claw.run(master);
+		line_tracker.run();
+
+		pros::lcd::set_text(5, std::to_string(line_tracker.get_cross_count()));
 
 		// wait for a specific amount of time before looping
 		pros::delay(TICK_DELAY);

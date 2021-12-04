@@ -57,6 +57,11 @@ public:
 
 	// handle instructions that should be run every frame to keep wheel's information up to date
 	void run();
+
+	// angle getter and setter
+	double get_angle() const;
+	void set_angle(double);
+	
 private:
 	// pointers to wheel motors
 	Safe_Motor* top_left;			// points to top_left wheel motor

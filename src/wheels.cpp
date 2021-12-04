@@ -128,3 +128,13 @@ void Wheels::run()
   // add the change in angle over the last tick to the angle tracker
   angle += angle_change;
 }
+
+double Wheels::get_angle() const
+{
+  return angle;
+}
+
+void Wheels::set_angle(double new_angle)
+{
+  angle = new_angle;
+}

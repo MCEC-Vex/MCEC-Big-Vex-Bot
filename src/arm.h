@@ -8,6 +8,9 @@
 #define ARM_1_PORT 1
 #define ARM_2_PORT 11
 
+// port for the pnuematic piston
+#define PISTON_PORT 'A'
+
 // direction arm motor rotates
 // forwards if positive voltage moves arm upwards
 // backwards if positive voltage moves arm downwards
@@ -26,7 +29,14 @@
 #define UPPER_ANGLE_LIMIT 90
 #define LOWER_ANGLE_LIMIT 10
 
+// math constant for
 #define MOTOR_TO_ARM_RATIO 10
+
+// Controller button for toggling the claw
+#define CLAW_BUTTON pros::E_CONTROLLER_DIGITAL_A
+
+// used to measure whether the claw is open or close
+enum STATE {closed, opened};
 
 // main arm of the bot
 class Arm
@@ -41,10 +51,20 @@ public:
   // --------------------------------
 
   // get input from the controller and move the arm accordingly
-  void move(pros::Controller);
+  void run(pros::Controller);
 
   // set the angle of the arm
   void set_angle(double);
+
+  //----------------
+  // handle the claw
+  // ---------------
+
+  // open the claw
+  void open();
+
+  // close the claw
+  void close();
 
 private:
 
@@ -54,6 +74,12 @@ private:
 
   // keeps track of the arm's angle
   double target_angle;
+
+  // pointer to the claw's pnuematic piston
+  pros::ADIDigitalOut* claw_piston;
+
+  // tracks whether the claw is opened or closed
+  STATE claw_state;
 };
 
 #endif

@@ -129,19 +129,13 @@ void Wheels::run()
   angle += angle_change;
 }
 
-<<<<<<< Updated upstream
-=======
 // angle getter
->>>>>>> Stashed changes
 double Wheels::get_angle() const
 {
   return angle;
 }
 
-<<<<<<< Updated upstream
-=======
 // angle setter
->>>>>>> Stashed changes
 void Wheels::set_angle(double new_angle)
 {
   angle = new_angle;

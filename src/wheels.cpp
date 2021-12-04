@@ -129,11 +129,13 @@ void Wheels::run()
   angle += angle_change;
 }
 
+// angle getter
 double Wheels::get_angle() const
 {
   return angle;
 }
 
+// angle setter
 void Wheels::set_angle(double new_angle)
 {
   angle = new_angle;
